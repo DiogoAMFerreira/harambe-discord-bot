@@ -16,6 +16,7 @@ module.exports = (client) => {
                         } else {
                             client.on(event.name, (...args) => event.execute(...args, client));
                         }
+                        // console.log(`Event ${event.name} has been required by handler`);
                     }
                     break;
                 default:

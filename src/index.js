@@ -14,6 +14,13 @@ const client = new Client({ intents: [
 
 client.commands = new Collection();
 client.commandsArray = [];
+client.player = new Player(client, {
+	ytdlOptions: {
+		quality: "highestaudio",
+		highWaterMark: 1 << 25
+	}
+})
+
 
 const handlers = fs.readdirSync('./src/handlers');
 for (const handler of handlers) {
@@ -22,15 +29,6 @@ for (const handler of handlers) {
 
 client.handleEvents();
 client.handleCommands();
-
-
-client.player = new Player(client, {
-	ytdlOptions: {
-		quality: "highestaudio",
-		highWaterMark: 1 << 25
-	}
-})
-
 
 // Log in to Discord with your client's token
 client.login(token);

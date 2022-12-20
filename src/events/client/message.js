@@ -10,7 +10,5 @@ module.exports = {
             await message.reply(`Hey ${message.author.username}! How you doing?`);
         }
 
-
-	    console.log(message);
     }
 }

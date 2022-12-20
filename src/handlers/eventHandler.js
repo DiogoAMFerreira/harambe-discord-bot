@@ -19,6 +19,17 @@ module.exports = (client) => {
                         // console.log(`Event ${event.name} has been required by handler`);
                     }
                     break;
+                case 'player':
+                    for (const file of eventFiles) {
+                        const event = require(`../events/${folder}/${file}`);
+                        if (event.once) {
+                            client.player.once(event.name, (...args) => event.execute(...args, client));
+                        } else {
+                            client.player.on(event.name, (...args) => event.execute(...args, client));
+                        }
+                        // console.log(`Event ${event.name} has been required by handler`);
+                    }
+                    break;
                 default:
                     break;
             }

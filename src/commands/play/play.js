@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const { QueryType } = require("discord-player");
 
 module.exports = {
@@ -55,6 +55,8 @@ module.exports = {
 			await queue.connect(interaction.member.voice.channel);
 		}
 
+		let embedReply = new EmbedBuilder();
+
 		let url;
 		switch (interaction.options.getSubcommand()){
 			case 'song':
@@ -73,6 +75,12 @@ module.exports = {
 				const song = songResult.tracks[0];
 
 				await queue.addTrack(song);
+
+				embedReply
+					.setDescription(`**[${song.title}]** was requested to Harambe.`)
+					.setThumbnail(song.thumbnail)
+					.setFooter({text: `Duration: ${song.duration}`});
+
 
 				break;
 			case 'playlist':
@@ -95,6 +103,11 @@ module.exports = {
 
 				await queue.addTracks(playlistResult.tracks);
 
+				embedReply.setDescription(`Playlist was requested to Harambe.`);
+				// .setDescription(`**[${playlistResult.title}]** was requested to Harambe.`);
+				// .setThumbnail(song.thumbnail)
+				// .setFooter({text: `Duration: ${song.duration}`});
+
 				break;
 			default:
 				await interaction.reply('Harambe hit itself on it\'s own confusion');
@@ -104,5 +117,9 @@ module.exports = {
 		if (!queue.playing) {
 			await queue.play();
 		}
+
+		await interaction.reply({
+			embeds: [embedReply]
+		});
 	},
 };

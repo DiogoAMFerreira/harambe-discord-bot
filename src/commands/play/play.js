@@ -50,12 +50,15 @@ module.exports = {
 			return interaction.reply("Harambe notices you are not in a voice-channel");
 		}
 
-		const queue = await client.player.createQueue(interaction.guild);
+		// const queue = await client.player.createQueue(interaction.guild);
+		const queue = await client.player.nodes.create(interaction.guild);
+
 		if (!queue.connection) {
 			await queue.connect(interaction.member.voice.channel);
 		}
 
 		let embedReply = new EmbedBuilder();
+		await interaction.reply('Harambe is preparing the queue');
 
 		let url;
 		switch (interaction.options.getSubcommand()){
@@ -67,7 +70,7 @@ module.exports = {
 					searchEngine: QueryType.YOUTUBE_VIDEO
 				});
 
-				if (songResult.tracks.length === 0) {
+				if (songResult.tracks.size === 0) {
 					await interaction.reply('Harambe could not load your song');
 					return;
 				}
@@ -101,7 +104,7 @@ module.exports = {
 					playlistResult.tracks = playlistResult.tracks.sort((a, b) => 0.5 - Math.random());
 				}
 
-				await queue.addTracks(playlistResult.tracks);
+				await queue.addTrack(playlistResult.tracks);
 
 				embedReply.setDescription(`Playlist was requested to Harambe.`);
 				// .setDescription(`**[${playlistResult.title}]** was requested to Harambe.`);
@@ -114,11 +117,11 @@ module.exports = {
 				return;
 		}
 
-		if (!queue.playing) {
-			await queue.play();
+		if (!queue.node.isPlaying()) {
+			await queue.node.play();
 		}
 
-		await interaction.reply({
+		await interaction.editReply({
 			embeds: [embedReply]
 		});
 	},

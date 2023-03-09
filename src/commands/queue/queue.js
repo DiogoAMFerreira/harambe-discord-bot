@@ -6,9 +6,9 @@ module.exports = {
         .setDescription("Shows the current song queue")
     , async execute(interaction, client) {
         
-        const queue = client.player.getQueue(interaction.guildId);
+        const queue = client.player.nodes.get(interaction.guildId);
         //In case there is no queue
-        if (!queue || !queue.playing) {
+        if (!queue || !queue.node.isPlaying()) {
             return await interaction.reply("Harambe is not playing any music");
         } 
 
@@ -48,17 +48,17 @@ module.exports = {
         let embedReply = new EmbedBuilder();
 
         //Current song playing
-        const currentSong = queue.current;
+        const currentSong = queue.currentTrack;
 
         let queueString = '*Nothing*';
-        if (queue.tracks.length > 0) {
-            queueString = queue.tracks.slice(0, 10).map((song, i) => {
+        if (queue.tracks.size > 0) {
+            queueString = queue.tracks.toArray().slice(0, 10).map((song, i) => {
                 return `**${i + 1}#** [${song.duration}] ${song.title}`;
                 //Requested by: <@${song.requestedBy.id}> //TODO: Find how to tag the user
             }).join("\n");
         }
 
-        const progressString = await queue.createProgressBar();
+        const progressString = await queue.node.createProgressBar();
 
         embedReply.setDescription(`**Harambe is currently playing:** \n ${currentSong.title} \n `)
             .setThumbnail(currentSong.thumbnail)

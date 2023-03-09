@@ -6,16 +6,16 @@ module.exports = {
         .setDescription("Skips the current playing song")
     , async execute(interaction, client) {
         
-        const queue = client.player.getQueue(interaction.guildId);
+        const queue = client.player.nodes.get(interaction.guildId);
         //In case there is no queue
         if (!queue) {
             return await interaction.reply("Harambe is not playing any music");
         } 
         
         //Next song playing
-        const nextSong = queue.tracks[0];
+        const nextSong = queue.tracks.toArray()[0];
         
-        queue.skip();
+        queue.node.skip();
 
         let embedReply = new EmbedBuilder();
 

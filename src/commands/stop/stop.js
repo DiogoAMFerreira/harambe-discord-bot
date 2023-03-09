@@ -6,13 +6,13 @@ module.exports = {
         .setDescription("Stops the queue")
     , async execute(interaction, client) {
         
-        const queue = client.player.getQueue(interaction.guildId);
+        const queue = client.player.nodes.get(interaction.guildId);
         //In case there is no queue
         if (!queue) {
             return await interaction.reply("Harambe is not playing any music");
         } 
 
-        queue.destroy();
+        queue.delete();
 
         let embedReply = new EmbedBuilder();
 

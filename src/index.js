@@ -14,7 +14,7 @@ const client = new Client({ intents: [
 
 client.commands = new Collection();
 client.commandsArray = [];
-client.player = new Player(client, {
+client.player = Player.singleton(client, {
 	ytdlOptions: {
 		quality: "highestaudio",
 		highWaterMark: 1 << 25

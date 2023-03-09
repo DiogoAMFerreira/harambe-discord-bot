@@ -23,9 +23,9 @@ module.exports = (client) => {
                     for (const file of eventFiles) {
                         const event = require(`../events/${folder}/${file}`);
                         if (event.once) {
-                            client.player.once(event.name, (...args) => event.execute(...args, client));
+                            client.player.events.once(event.name, (...args) => event.execute(...args, client));
                         } else {
-                            client.player.on(event.name, (...args) => event.execute(...args, client));
+                            client.player.events.on(event.name, (...args) => event.execute(...args, client));
                         }
                         // console.log(`Event ${event.name} has been required by handler`);
                     }

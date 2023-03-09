@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -11,8 +11,21 @@ module.exports = {
         if (!queue) {
             return await interaction.reply("Harambe is not playing any music");
         } 
-
+        
+        //Next song playing
+        const nextSong = queue.tracks[0];
+        
         queue.skip();
+
+        let embedReply = new EmbedBuilder();
+
+        embedReply.setDescription(`**Harambe has skipped the current song.**`)
+        .setThumbnail(nextSong.thumbnail)
+        .setFooter({text: `Next song: \n ${nextSong.title} \n`});
+
+        await interaction.reply({
+            embeds: [embedReply]
+        });
     }
 
 }

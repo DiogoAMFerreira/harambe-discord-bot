@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -13,6 +13,14 @@ module.exports = {
         } 
 
         queue.destroy();
+
+        let embedReply = new EmbedBuilder();
+
+        embedReply.setDescription(`Harambe will stop playing.`)
+
+        await interaction.reply({
+            embeds: [embedReply]
+        });
 
     }
 

@@ -32,6 +32,7 @@
     "discord-api-types": "^0.37.14",
     "discord-player": "^6.0.0",
     "discord.js": "^14.6.0",
-    "ffmpeg-static": "^5.1.0"
+    "ffmpeg-static": "^5.1.0",
+    "ytdl-core": "^4.11.3"
   }
 }

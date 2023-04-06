@@ -46,19 +46,22 @@ module.exports = {
 		// )
 		,
 	async execute(interaction, client) {
+		
+		let embedReply = new EmbedBuilder();
+
 		if (!interaction.member.voice.channel) {
-			return interaction.reply("Harambe notices you are not in a voice-channel");
+			embedReply.setDescription('Harambe notices you are not in a voice-channel')
+			return await interaction.reply({embeds: [embedReply]});
 		}
 
-		// const queue = await client.player.createQueue(interaction.guild);
 		const queue = await client.player.nodes.create(interaction.guild);
-
 		if (!queue.connection) {
 			await queue.connect(interaction.member.voice.channel);
 		}
 
-		let embedReply = new EmbedBuilder();
-		await interaction.reply('Harambe is preparing the queue');
+		// Set a reply early to prevent timeout
+		embedReply.setDescription('Harambe is preparing the queue')
+		await interaction.reply({embeds: [embedReply]});
 
 		let url;
 		switch (interaction.options.getSubcommand()){
@@ -71,8 +74,8 @@ module.exports = {
 				});
 
 				if (songResult.tracks.size === 0) {
-					await interaction.reply('Harambe could not load your song');
-					return;
+					embedReply.setDescription('Harambe could not load your song');
+					return await interaction.editReply({embeds: [embedReply]});
 				}
 
 				const song = songResult.tracks[0];
@@ -96,8 +99,8 @@ module.exports = {
 				});
 
 				if (playlistResult.tracks.length === 0) {
-					await interaction.reply('Harambe could not load your playlist');
-					return;
+					embedReply.setDescription('Harambe could not load your playlist');
+					return await interaction.editReply({embeds: [embedReply]});
 				}
 
 				if (shuffle) {
@@ -113,16 +116,14 @@ module.exports = {
 
 				break;
 			default:
-				await interaction.reply('Harambe hit itself on it\'s own confusion');
-				return;
+				embedReply.setDescription('Harambe hit itself on it\'s own confusion');
+				return await interaction.editReply({embeds: [embedReply]});
 		}
 
 		if (!queue.node.isPlaying()) {
 			await queue.node.play();
 		}
 
-		await interaction.editReply({
-			embeds: [embedReply]
-		});
+		await interaction.editReply({embeds: [embedReply]});
 	},
 };

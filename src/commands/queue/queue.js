@@ -6,13 +6,16 @@ module.exports = {
         .setDescription("Shows the current song queue")
     , async execute(interaction, client) {
         
+        let embedReply = new EmbedBuilder();
+
         const queue = client.player.nodes.get(interaction.guildId);
         //In case there is no queue
         if (!queue || !queue.node.isPlaying()) {
-            return await interaction.reply("Harambe is not playing any music");
+            embedReply.setDescription('Harambe is not playing any music');
+            return await interaction.reply({embeds: [embedReply]});
         } 
 
-        const embedReply = await this.createQueueEmbeded(queue);
+        embedReply = await this.createQueueEmbeded(queue);
 
         const messageReply = await interaction.reply({
 			embeds: [embedReply],

@@ -6,18 +6,21 @@ module.exports = {
         .setDescription("Pauses the current playing song")
     , async execute(interaction, client) {
         try {
+            let embedReply = new EmbedBuilder();
+
             const queue = client.player.nodes.get(interaction.guildId);
-            //In case there is no queue
+            
             if (!queue) {
-                return await interaction.reply("Harambe is not playing any music");
+                //In case there is no queue
+                embedReply.setDescription("Harambe is not playing any music")
+                return await interaction.reply(embedReply);
             } 
             
-            // console.log(queue.getPlayerTimestamp())
             queue.node.pause();
-            //Current song playing
             
-            let embedReply = new EmbedBuilder();
+            //Current song playing
             const currentSong = queue.currentTrack;
+            
             const progressString = await queue.node.createProgressBar();
     
             embedReply.setDescription(`**Harambe has paused the current song:** \n ${currentSong.title} \n`)
